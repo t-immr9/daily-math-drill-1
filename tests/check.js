@@ -153,6 +153,10 @@ const seen = new Set();
 for (const q of Q) { if (seen.has(q.t)) continue; seen.add(q.t);
   const L = run(`keyLayout(Q.find(q=>q.id===${JSON.stringify(q.id)}))`), k = L.indexOf('1');
   ok('キー配置: 単元' + q.t, k % 3 === 0 && L.slice(k, k + 12).join('') === '123456789−0⌫'); }
+// 不等式の問題では ＜ ＞ ≦ ≧ の4つがそろっている(1つだけだとヒントになる)
+for (const q of Q) if (/[＜＞≦≧]/.test(q.q + (q.a || []).join(''))) {
+  const L = run(`keyLayout(Q.find(q=>q.id===${JSON.stringify(q.id)}))`);
+  ok('不等号4つ: ' + q.q, ['＜', '＞', '≦', '≧'].every(s => L.includes(s))); }
 
 // ---- 7. 記録・単元・引き継ぎ ----
 run("P.days={};P.wrong={};P.units=PLAN.map(e=>e.id);P.set=null");
